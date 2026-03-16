@@ -1,0 +1,108 @@
+/* Importar tipografía moderna */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap');
+
+body {
+    font-family: 'Poppins', sans-serif;
+    margin: 0;
+    padding: 0;
+    /* Aquí va tu GIF. Asegúrate de que la ruta sea correcta */
+    background: url('../assets/background.gif') no-repeat center center fixed;
+    background-size: cover;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+/* Base Glassmorphism con distorsión tipo agua (saturación y contraste) */
+.glass-panel, .glass-nav, .glass-footer {
+    background: rgba(255, 255, 255, 0.1);
+    /* El truco del agua: difuminado + aumento de saturación */
+    backdrop-filter: blur(15px) saturate(160%) contrast(110%);
+    -webkit-backdrop-filter: blur(15px) saturate(160%) contrast(110%);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+}
+
+.glass-nav, .glass-footer {
+    backdrop-filter: blur(20px) saturate(180%);
+}
+
+.form-container {
+    border-radius: 20px;
+}
+
+/* Estilos de la Tarjeta */
+.credit-card {
+    width: 380px;
+    height: 240px;
+    border-radius: 20px;
+    padding: 25px;
+    color: white;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    position: relative;
+    overflow: hidden;
+    /* Animación flotante suave */
+    animation: float 6s ease-in-out infinite;
+}
+
+@keyframes float {
+    0% { transform: translateY(0px); }
+    50% { transform: translateY(-10px); }
+    100% { transform: translateY(0px); }
+}
+
+.chip-icon {
+    width: 45px;
+    opacity: 0.8;
+}
+
+.card-number {
+    font-size: 1.6rem;
+    letter-spacing: 3px;
+    text-shadow: 1px 1px 3px rgba(0,0,0,0.5);
+}
+
+/* Inputs de vidrio */
+.glass-input {
+    background: rgba(255, 255, 255, 0.05) !important;
+    border: 1px solid rgba(255, 255, 255, 0.3) !important;
+    color: white !important;
+    backdrop-filter: blur(5px);
+}
+.glass-input::placeholder {
+    color: rgba(255, 255, 255, 0.5);
+}
+.glass-input:focus {
+    box-shadow: 0 0 15px rgba(255, 255, 255, 0.3);
+}
+
+/* Animación Logo Slide */
+.logo-slide-out {
+    animation: slideOut 0.3s forwards;
+}
+.logo-slide-in {
+    animation: slideIn 0.3s forwards;
+}
+
+@keyframes slideOut {
+    0% { transform: translateY(0); opacity: 1; }
+    100% { transform: translateY(-20px); opacity: 0; }
+}
+@keyframes slideIn {
+    0% { transform: translateY(20px); opacity: 0; }
+    100% { transform: translateY(0); opacity: 1; }
+}
+
+/* Animación para los números que "caminan/vuelan" */
+.flying-number {
+    position: fixed;
+    color: white;
+    font-size: 1.2rem;
+    font-weight: bold;
+    pointer-events: none;
+    z-index: 9999;
+    transition: all 0.5s cubic-bezier(0.25, 1, 0.5, 1);
+    text-shadow: 0 0 5px white;
+}
