@@ -25,87 +25,108 @@
         </div>
     </nav>
 
-    <main class="container my-5 d-flex justify-content-center align-items-center min-vh-100">
-        <div class="row w-100 justify-content-center">
-            
-            <div class="col-md-5 mb-4 d-flex justify-content-center position-relative">
-                <div class="credit-card glass-panel water-effect" id="creditCard">
-                    <div class="card-logos d-flex justify-content-between align-items-start">
-                        <img src="https://cdn-icons-png.flaticon.com/512/6404/6404100.png" alt="Chip" class="chip-icon">
-                        <div id="cardBrandLogo" class="brand-logo fw-bold fs-3 fst-italic text-white">VISA</div>
-                    </div>
-                    <div class="card-number mt-4" id="cardNumberDisplay">#### #### #### ####</div>
-                    <div class="card-details d-flex justify-content-between mt-4">
-                        <div class="card-holder">
-                            <small>Titular</small>
-                            <div id="cardNameDisplay">NOMBRE APELLIDO</div>
-                        </div>
-                        <div class="card-expiry">
-                            <small>Expira</small>
-                            <div id="cardExpiryDisplay">MM/YY</div>
+    <main class="container my-5 d-flex justify-content-center align-items-center flex-grow-1">
+        
+        <div class="main-glass-wrapper glass-panel p-4 p-md-5 w-100 shadow-lg">
+            <div class="row align-items-center justify-content-center gap-4 gap-lg-0">
+                
+                <div class="col-lg-6 d-flex justify-content-center perspective-container">
+                    <div class="credit-card-scene" id="cardScene">
+                        <div class="credit-card-inner water-effect" id="creditCard">
+                            
+                            <div class="card-face card-front">
+                                <div class="card-logos d-flex justify-content-between align-items-start">
+                                    <img src="https://cdn-icons-png.flaticon.com/512/6404/6404100.png" alt="Chip" class="chip-icon">
+                                    <img src="assets/visa-logo.png" alt="Brand" id="brandLogoImg" class="brand-logo-img">
+                                </div>
+                                <div class="card-number" id="cardNumberDisplay">#### #### #### ####</div>
+                                <div class="card-details d-flex justify-content-between">
+                                    <div class="card-holder">
+                                        <small class="d-block opacity-75">Titular</small>
+                                        <div id="cardNameDisplay" class="fw-bold">NOMBRE APELLIDO</div>
+                                    </div>
+                                    <div class="card-expiry text-end">
+                                        <small class="d-block opacity-75">Expira</small>
+                                        <div id="cardExpiryDisplay" class="fw-bold">MM/YY</div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="card-face card-back">
+                                <div class="magnetic-strip"></div>
+                                <div class="cvv-area">
+                                    <small class="d-block text-end pe-2 opacity-75">CVV</small>
+                                    <div class="cvv-box text-end pe-3 text-dark fw-bold" id="cvvDisplay"></div>
+                                </div>
+                                <div class="back-logo d-flex justify-content-end mt-4 pe-3">
+                                    <img src="assets/visa-logo.png" alt="Brand" id="brandLogoImgBack" class="brand-logo-img opacity-50">
+                                </div>
+                            </div>
+
                         </div>
                     </div>
                 </div>
+
+                <div class="col-lg-6">
+                    <div class="form-container" id="checkoutForm">
+                        <h4 class="text-white mb-4 fw-bold">Detalles de Pago</h4>
+                        
+                        <div class="mb-4 text-white">
+                            <label class="form-label d-block text-uppercase small opacity-75">Tipo de Tarjeta</label>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input custom-radio" type="radio" name="cardType" id="visaRadio" value="VISA" checked>
+                                <label class="form-check-label" for="visaRadio">Visa</label>
+                            </div>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input custom-radio" type="radio" name="cardType" id="masterRadio" value="MASTERCARD">
+                                <label class="form-check-label" for="masterRadio">Mastercard</label>
+                            </div>
+                        </div>
+
+                        <div class="mb-3 position-relative">
+                            <label class="text-white small opacity-75">Número de Tarjeta</label>
+                            <input type="text" class="form-control glass-input fw-bold" id="cardNumberInput" maxlength="19" placeholder="1234 5678 9876 5432">
+                        </div>
+                        <div class="mb-3">
+                            <label class="text-white small opacity-75">Nombre del Titular</label>
+                            <input type="text" class="form-control glass-input fw-bold" id="cardNameInput" placeholder="Juan Pérez">
+                        </div>
+                        <div class="row">
+                            <div class="col-6 mb-3">
+                                <label class="text-white small opacity-75">Expiración</label>
+                                <input type="text" class="form-control glass-input fw-bold" id="cardExpiryInput" maxlength="5" placeholder="12/28">
+                            </div>
+                            <div class="col-6 mb-3">
+                                <label class="text-white small opacity-75">CVV</label>
+                                <input type="text" class="form-control glass-input fw-bold" id="cvvInput" maxlength="3" placeholder="123">
+                            </div>
+                        </div>
+                        <button class="btn btn-light w-100 mt-4 py-2 fw-bold pay-btn text-dark" id="payButton">Pagar Ahora</button>
+                    </div>
+
+                    <div class="text-center text-white" id="loadingScreen" style="display: none;">
+                        <h5 id="loadingText" class="mb-4">Verificando datos bancarios...</h5>
+                        <div class="progress" style="height: 20px; background: rgba(0,0,0,0.3); border-radius: 10px;">
+                            <div class="progress-bar progress-bar-striped progress-bar-animated bg-light text-dark fw-bold" id="progressBar" role="progressbar" style="width: 0%"></div>
+                        </div>
+                    </div>
+
+                    <div class="text-center text-white" id="successScreen" style="display: none;">
+                        <h1 class="mb-3 display-1">🎉</h1>
+                        <h4 id="successMessage" class="fw-bold mb-4"></h4>
+                        <button class="btn btn-outline-light px-4" onclick="location.reload()">Regresar</button>
+                    </div>
+                </div>
+
             </div>
-
-            <div class="col-md-5">
-                <div class="form-container glass-panel p-4" id="checkoutForm">
-                    <h4 class="text-white mb-4">Detalles de Pago</h4>
-                    
-                    <div class="mb-3 text-white">
-                        <label class="form-label d-block">Tipo de Tarjeta</label>
-                        <div class="form-check form-check-inline">
-                            <input class="form-check-input" type="radio" name="cardType" id="visaRadio" value="VISA" checked>
-                            <label class="form-check-label" for="visaRadio">Visa</label>
-                        </div>
-                        <div class="form-check form-check-inline">
-                            <input class="form-check-input" type="radio" name="cardType" id="masterRadio" value="MASTERCARD">
-                            <label class="form-check-label" for="masterRadio">Mastercard</label>
-                        </div>
-                    </div>
-
-                    <div class="mb-3 position-relative">
-                        <label class="text-white">Número de Tarjeta</label>
-                        <input type="text" class="form-control glass-input" id="cardNumberInput" maxlength="16" placeholder="1234 5678 9876 5432">
-                    </div>
-                    <div class="mb-3">
-                        <label class="text-white">Nombre del Titular</label>
-                        <input type="text" class="form-control glass-input" id="cardNameInput" placeholder="Juan Pérez">
-                    </div>
-                    <div class="row">
-                        <div class="col-6 mb-3">
-                            <label class="text-white">Expiración</label>
-                            <input type="text" class="form-control glass-input" id="cardExpiryInput" maxlength="5" placeholder="12/28">
-                        </div>
-                        <div class="col-6 mb-3">
-                            <label class="text-white">CVV</label>
-                            <input type="password" class="form-control glass-input" maxlength="3" placeholder="123">
-                        </div>
-                    </div>
-                    <button class="btn btn-primary w-100 mt-3 pay-btn" id="payButton">Pagar Ahora</button>
-                </div>
-
-                <div class="glass-panel p-5 text-center text-white" id="loadingScreen" style="display: none;">
-                    <h5 id="loadingText">Verificando datos bancarios...</h5>
-                    <div class="progress mt-4" style="height: 25px; background: rgba(0,0,0,0.3);">
-                        <div class="progress-bar progress-bar-striped progress-bar-animated bg-success" id="progressBar" role="progressbar" style="width: 0%"></div>
-                    </div>
-                </div>
-
-                <div class="glass-panel p-5 text-center text-white" id="successScreen" style="display: none;">
-                    <h2 class="mb-3">💸</h2>
-                    <h4 id="successMessage" class="fw-bold"></h4>
-                    <button class="btn btn-outline-light mt-4" onclick="location.reload()">Hacer otra compra</button>
-                </div>
-            </div>
-
         </div>
     </main>
 
-    <footer class="glass-footer text-center text-white py-3 mt-auto">
+    <footer class="glass-footer text-center text-white py-4 mt-auto">
         <div class="container">
-            <p class="mb-0">Desarrollado por: <strong>[Tu Nombre/Matrícula Aquí]</strong></p>
-            <small>Examen Tema 2: HTML, XML y CSS - Entorno Ficticio Escolar</small>
+            <p class="mb-1">Desarrollado por: <strong>Gael</strong> | Matrícula: <strong>22200761</strong></p>
+            <p class="mb-0 small opacity-75">Ingeniería en Sistemas Computacionales - Tecnológico Nacional de México Campus Pachuca</p>
+            <small class="opacity-50">Examen Tema 2: HTML, XML y CSS</small>
         </div>
     </footer>
 

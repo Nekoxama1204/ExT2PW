@@ -1,11 +1,9 @@
-/* Importar tipografía moderna */
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap');
 
 body {
     font-family: 'Poppins', sans-serif;
     margin: 0;
     padding: 0;
-    /* Aquí va tu GIF. Asegúrate de que la ruta sea correcta */
     background: url('../assets/background.gif') no-repeat center center fixed;
     background-size: cover;
     display: flex;
@@ -13,58 +11,124 @@ body {
     min-height: 100vh;
 }
 
-/* Base Glassmorphism con distorsión tipo agua (saturación y contraste) */
+/* Base Glassmorphism */
 .glass-panel, .glass-nav, .glass-footer {
     background: rgba(255, 255, 255, 0.1);
-    /* El truco del agua: difuminado + aumento de saturación */
     backdrop-filter: blur(15px) saturate(160%) contrast(110%);
     -webkit-backdrop-filter: blur(15px) saturate(160%) contrast(110%);
     border: 1px solid rgba(255, 255, 255, 0.2);
-    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
 }
 
-.glass-nav, .glass-footer {
-    backdrop-filter: blur(20px) saturate(180%);
+.main-glass-wrapper {
+    border-radius: 25px;
+    max-width: 1000px; /* Limita el ancho en computadoras para que no se estire de más */
 }
 
-.form-container {
-    border-radius: 20px;
+/* Contenedor 3D de la tarjeta */
+.perspective-container {
+    perspective: 1000px; /* Le da profundidad al giro */
 }
 
-/* Estilos de la Tarjeta */
-.credit-card {
-    width: 380px;
-    height: 240px;
+.credit-card-scene {
+    width: 100%;
+    max-width: 400px; /* Más grande en desktop */
+    height: 250px;
+    cursor: pointer;
+}
+
+.credit-card-inner {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    transition: transform 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275); /* Efecto rebote */
+    transform-style: preserve-3d;
+    animation: float 6s ease-in-out infinite;
+}
+
+/* Clase que aplicaremos con JS para girar */
+.credit-card-inner.is-flipped {
+    transform: rotateY(180deg);
+}
+
+@keyframes float {
+    0% { transform: translateY(0px) rotateY(var(--rot, 0deg)); }
+    50% { transform: translateY(-10px) rotateY(var(--rot, 0deg)); }
+    100% { transform: translateY(0px) rotateY(var(--rot, 0deg)); }
+}
+
+/* Caras de la tarjeta */
+.card-face {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    backface-visibility: hidden; /* Oculta la parte trasera al girar */
+    -webkit-backface-visibility: hidden;
     border-radius: 20px;
     padding: 25px;
     color: white;
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
-    position: relative;
-    overflow: hidden;
-    /* Animación flotante suave */
-    animation: float 6s ease-in-out infinite;
+    justify-content: space-between; /* Distribuye arriba, centro y abajo perfecto */
+    background: rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(10px) saturate(120%);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.2);
 }
 
-@keyframes float {
-    0% { transform: translateY(0px); }
-    50% { transform: translateY(-10px); }
-    100% { transform: translateY(0px); }
+/* Frente */
+.card-front {
+    z-index: 2;
 }
 
+/* Reverso */
+.card-back {
+    transform: rotateY(180deg);
+    padding: 25px 0; /* Quitamos padding lateral para la banda magnética */
+}
+
+/* Elementos de la tarjeta */
 .chip-icon {
-    width: 45px;
-    opacity: 0.8;
+    width: 50px;
+    opacity: 0.9;
+}
+
+.brand-logo-img {
+    height: 35px;
+    object-fit: contain;
+    transition: opacity 0.3s;
 }
 
 .card-number {
     font-size: 1.6rem;
-    letter-spacing: 3px;
+    letter-spacing: 2.5px;
     text-shadow: 1px 1px 3px rgba(0,0,0,0.5);
+    white-space: nowrap; /* Fuerza a que se quede en una sola línea */
+    font-family: 'Courier New', Courier, monospace; /* Da un look más real de tarjeta */
 }
 
-/* Inputs de vidrio */
+/* Reverso de la tarjeta */
+.magnetic-strip {
+    width: 100%;
+    height: 45px;
+    background: rgba(0, 0, 0, 0.8);
+    margin-top: 10px;
+}
+
+.cvv-area {
+    padding: 0 25px;
+    margin-top: 15px;
+}
+
+.cvv-box {
+    background: rgba(255, 255, 255, 0.8);
+    height: 35px;
+    border-radius: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+}
+
+/* Inputs y Formulario */
 .glass-input {
     background: rgba(255, 255, 255, 0.05) !important;
     border: 1px solid rgba(255, 255, 255, 0.3) !important;
@@ -72,37 +136,37 @@ body {
     backdrop-filter: blur(5px);
 }
 .glass-input::placeholder {
-    color: rgba(255, 255, 255, 0.5);
+    color: rgba(255, 255, 255, 0.4);
 }
 .glass-input:focus {
-    box-shadow: 0 0 15px rgba(255, 255, 255, 0.3);
+    box-shadow: 0 0 15px rgba(255, 255, 255, 0.2);
+    border-color: rgba(255, 255, 255, 0.6) !important;
 }
 
-/* Animación Logo Slide */
-.logo-slide-out {
-    animation: slideOut 0.3s forwards;
-}
-.logo-slide-in {
-    animation: slideIn 0.3s forwards;
-}
-
-@keyframes slideOut {
-    0% { transform: translateY(0); opacity: 1; }
-    100% { transform: translateY(-20px); opacity: 0; }
-}
-@keyframes slideIn {
-    0% { transform: translateY(20px); opacity: 0; }
-    100% { transform: translateY(0); opacity: 1; }
-}
-
-/* Animación para los números que "caminan/vuelan" */
+/* Animación del texto que vuela */
 .flying-number {
     position: fixed;
     color: white;
-    font-size: 1.2rem;
+    font-size: 1.3rem;
     font-weight: bold;
     pointer-events: none;
     z-index: 9999;
     transition: all 0.5s cubic-bezier(0.25, 1, 0.5, 1);
-    text-shadow: 0 0 5px white;
+    text-shadow: 0 0 8px rgba(255,255,255,0.8);
+    font-family: 'Courier New', Courier, monospace;
+}
+
+/* Ajustes responsivos */
+@media (max-width: 768px) {
+    .credit-card-scene {
+        max-width: 320px;
+        height: 200px;
+    }
+    .card-number {
+        font-size: 1.25rem;
+        letter-spacing: 1.5px;
+    }
+    .main-glass-wrapper {
+        padding: 1.5rem !important;
+    }
 }
