@@ -27,6 +27,13 @@ body {
 /* Contenedor 3D de la tarjeta */
 .perspective-container {
     perspective: 1000px; 
+    animation: float 6s ease-in-out infinite;
+}
+
+@keyframes float {
+    0% { transform: translateY(0px); }
+    50% { transform: translateY(-10px); }
+    100% { transform: translateY(0px); }
 }
 
 .credit-card-scene {
@@ -42,20 +49,13 @@ body {
     position: relative;
     transition: transform 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275); 
     transform-style: preserve-3d;
-    animation: float 6s ease-in-out infinite;
 }
 
 .credit-card-inner.is-flipped {
     transform: rotateY(180deg);
 }
 
-@keyframes float {
-    0% { transform: translateY(0px) rotateY(var(--rot, 0deg)); }
-    50% { transform: translateY(-10px) rotateY(var(--rot, 0deg)); }
-    100% { transform: translateY(0px) rotateY(var(--rot, 0deg)); }
-}
-
-/* Caras de la tarjeta (MÁS OSCURAS Y OPAZAS) */
+/* Caras de la tarjeta */
 .card-face {
     position: absolute;
     width: 100%;
@@ -63,12 +63,7 @@ body {
     backface-visibility: hidden; 
     -webkit-backface-visibility: hidden;
     border-radius: 20px;
-    padding: 25px;
-    color: white;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between; 
-    background: rgba(20, 20, 20, 0.65); /* Más oscuro y opaco para resaltar */
+    background: rgba(50, 50, 50, 0.75); 
     backdrop-filter: blur(12px) saturate(150%);
     border: 1px solid rgba(255, 255, 255, 0.15);
     box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
@@ -76,13 +71,20 @@ body {
 
 .card-front {
     z-index: 2;
+    padding: 25px;
+    color: white;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between; 
 }
 
 .card-back {
     transform: rotateY(180deg);
-    padding: 25px 0; 
+    padding: 0; /* Sin padding para que la barra negra toque los bordes */
+    display: block;
 }
 
+/* Elementos del Frente */
 .chip-icon {
     width: 50px;
     opacity: 0.9;
@@ -102,35 +104,31 @@ body {
     font-family: 'Courier New', Courier, monospace; 
 }
 
-/* Reverso de la tarjeta */
+/* Elementos del Reverso */
 .magnetic-strip {
     width: 100%;
     height: 45px;
-    background: rgba(0, 0, 0, 0.9);
-    margin-top: 10px;
+    background: rgba(0, 0, 0, 0.85);
+    margin-top: 30px;
 }
 
-.card-number-back {
-    font-size: 1.1rem;
-    letter-spacing: 2px;
-    font-family: 'Courier New', Courier, monospace;
-    opacity: 0.3;
-    filter: blur(1.5px); /* Difuminado */
-    text-align: left;
-}
-
-.cvv-area {
+.cvv-container {
     padding: 0 25px;
-    margin-top: 5px;
+    margin-top: 20px;
+    text-align: right;
 }
 
-.cvv-box {
-    background: rgba(255, 255, 255, 0.85);
+.cvv-box-back {
+    background: #ffffff;
+    color: #000000;
     height: 35px;
-    border-radius: 5px;
-    display: flex;
+    width: 60px;
+    border-radius: 4px;
+    display: inline-flex;
     align-items: center;
     justify-content: flex-end;
+    padding-right: 10px;
+    box-shadow: inset 0 2px 4px rgba(0,0,0,0.3);
 }
 
 /* Inputs */
@@ -171,5 +169,8 @@ body {
     }
     .main-glass-wrapper {
         padding: 1.5rem !important;
+    }
+    .magnetic-strip {
+        margin-top: 20px;
     }
 }

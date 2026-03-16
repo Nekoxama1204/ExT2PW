@@ -1,9 +1,7 @@
 document.addEventListener("DOMContentLoaded", () => {
     
-    // --- ELEMENTOS ---
     const cardInput = document.getElementById('cardNumberInput');
     const cardDisplay = document.getElementById('cardNumberDisplay');
-    const cardNumberBackDisplay = document.getElementById('cardNumberBackDisplay');
     const cardInner = document.getElementById('creditCard');
     const cardScene = document.getElementById('cardScene');
     const cvvInput = document.getElementById('cvvInput');
@@ -11,24 +9,19 @@ document.addEventListener("DOMContentLoaded", () => {
     const expiryInput = document.getElementById('cardExpiryInput');
     const formError = document.getElementById('formError');
     
-    // --- LÓGICA DE GIRO 3D ---
+    // 1. Gira al darle clic a la tarjeta
     cardScene.addEventListener('click', () => {
         cardInner.classList.toggle('is-flipped');
-        if(cardInner.classList.contains('is-flipped')) {
-            cardInner.style.setProperty('--rot', '180deg');
-        } else {
-            cardInner.style.setProperty('--rot', '0deg');
-        }
     });
 
+    // 2. Gira al darle clic al input del CVV
     cvvInput.addEventListener('focus', () => {
         cardInner.classList.add('is-flipped');
-        cardInner.style.setProperty('--rot', '180deg');
     });
 
+    // 3. Regresa al frente cuando sales del input del CVV
     cvvInput.addEventListener('blur', () => {
         cardInner.classList.remove('is-flipped');
-        cardInner.style.setProperty('--rot', '0deg');
     });
 
     cvvInput.addEventListener('input', function() {
@@ -67,12 +60,10 @@ document.addEventListener("DOMContentLoaded", () => {
                 flyingEl.remove();
                 let padVal = formattedVal.padEnd(19, '#');
                 cardDisplay.innerText = padVal;
-                cardNumberBackDisplay.innerText = padVal;
             }, 500);
         } else {
             let padVal = formattedVal.padEnd(19, '#');
             cardDisplay.innerText = padVal;
-            cardNumberBackDisplay.innerText = padVal;
         }
     });
 
@@ -123,7 +114,6 @@ document.addEventListener("DOMContentLoaded", () => {
         // Validación estricta
         if (cardInput.value.length < 19 || nameInput.value.trim() === '' || expiryInput.value.length < 5 || cvvInput.value.length < 3) {
             formError.classList.remove('d-none'); // Muestra el error
-            // Animación de vibración para el error (opcional pero se ve bien)
             document.getElementById('checkoutForm').animate([
                 { transform: 'translateX(0)' }, { transform: 'translateX(-10px)' },
                 { transform: 'translateX(10px)' }, { transform: 'translateX(0)' }
@@ -157,7 +147,7 @@ document.addEventListener("DOMContentLoaded", () => {
         }, 500);
     });
 
-    // --- RESETEAR FORMULARIO (Hacer otra compra) ---
+    // --- RESETEAR FORMULARIO ---
     document.getElementById('resetBtn').addEventListener('click', () => {
         // Limpiar inputs
         cardInput.value = '';
@@ -167,14 +157,12 @@ document.addEventListener("DOMContentLoaded", () => {
         
         // Limpiar display de la tarjeta
         cardDisplay.innerText = '#### #### #### ####';
-        cardNumberBackDisplay.innerText = '#### #### #### ####';
         document.getElementById('cardNameDisplay').innerText = 'NOMBRE APELLIDO';
         document.getElementById('cardExpiryDisplay').innerText = 'MM/YY';
         document.getElementById('cvvDisplay').innerText = '';
         
         // Asegurar que la tarjeta esté de frente
         cardInner.classList.remove('is-flipped');
-        cardInner.style.setProperty('--rot', '0deg');
         
         // Resetear barra de progreso y pantallas
         document.getElementById('progressBar').style.width = '0%';
