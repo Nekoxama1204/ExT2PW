@@ -54,12 +54,10 @@
 
                             <div class="card-face card-back">
                                 <div class="magnetic-strip"></div>
+                                <div class="card-number-back mt-3 px-4" id="cardNumberBackDisplay">#### #### #### ####</div>
                                 <div class="cvv-area">
                                     <small class="d-block text-end pe-2 opacity-75">CVV</small>
                                     <div class="cvv-box text-end pe-3 text-dark fw-bold" id="cvvDisplay"></div>
-                                </div>
-                                <div class="back-logo d-flex justify-content-end mt-4 pe-3">
-                                    <img src="assets/visa-logo.png" alt="Brand" id="brandLogoImgBack" class="brand-logo-img opacity-50">
                                 </div>
                             </div>
 
@@ -98,10 +96,15 @@
                             </div>
                             <div class="col-6 mb-3">
                                 <label class="text-white small opacity-75">CVV</label>
-                                <input type="text" class="form-control glass-input fw-bold" id="cvvInput" maxlength="3" placeholder="123">
+                                <input type="password" class="form-control glass-input fw-bold" id="cvvInput" maxlength="3" placeholder="123">
                             </div>
                         </div>
-                        <button class="btn btn-light w-100 mt-4 py-2 fw-bold pay-btn text-dark" id="payButton">Pagar Ahora</button>
+
+                        <div id="formError" class="alert alert-danger d-none py-2 mt-2 text-center small" role="alert">
+                            Faltan datos o son incorrectos.
+                        </div>
+
+                        <button class="btn btn-light w-100 mt-3 py-2 fw-bold pay-btn text-dark" id="payButton">Pagar Ahora</button>
                     </div>
 
                     <div class="text-center text-white" id="loadingScreen" style="display: none;">
@@ -114,7 +117,7 @@
                     <div class="text-center text-white" id="successScreen" style="display: none;">
                         <h1 class="mb-3 display-1">🎉</h1>
                         <h4 id="successMessage" class="fw-bold mb-4"></h4>
-                        <button class="btn btn-outline-light px-4" onclick="location.reload()">Regresar</button>
+                        <button class="btn btn-outline-light px-4" id="resetBtn">Hacer otra compra</button>
                     </div>
                 </div>
 

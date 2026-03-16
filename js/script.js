@@ -1,16 +1,19 @@
 document.addEventListener("DOMContentLoaded", () => {
     
-    // --- 1. ELEMENTOS DE LA TARJETA ---
+    // --- ELEMENTOS ---
     const cardInput = document.getElementById('cardNumberInput');
     const cardDisplay = document.getElementById('cardNumberDisplay');
+    const cardNumberBackDisplay = document.getElementById('cardNumberBackDisplay');
     const cardInner = document.getElementById('creditCard');
     const cardScene = document.getElementById('cardScene');
     const cvvInput = document.getElementById('cvvInput');
+    const nameInput = document.getElementById('cardNameInput');
+    const expiryInput = document.getElementById('cardExpiryInput');
+    const formError = document.getElementById('formError');
     
-    // Girar al hacer click en la tarjeta
+    // --- LÓGICA DE GIRO 3D ---
     cardScene.addEventListener('click', () => {
         cardInner.classList.toggle('is-flipped');
-        // Ajustamos la animación de flotación para que no se rompa visualmente al girar
         if(cardInner.classList.contains('is-flipped')) {
             cardInner.style.setProperty('--rot', '180deg');
         } else {
@@ -18,7 +21,6 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     });
 
-    // Girar automáticamente al entrar/salir del campo CVV
     cvvInput.addEventListener('focus', () => {
         cardInner.classList.add('is-flipped');
         cardInner.style.setProperty('--rot', '180deg');
@@ -29,18 +31,17 @@ document.addEventListener("DOMContentLoaded", () => {
         cardInner.style.setProperty('--rot', '0deg');
     });
 
-    // Actualizar CVV
     cvvInput.addEventListener('input', function() {
-        let val = this.value.replace(/\D/g, ''); // Solo números
+        let val = this.value.replace(/\D/g, ''); 
         this.value = val;
         document.getElementById('cvvDisplay').innerText = val;
     });
 
-    // --- 2. LOGICA DE NÚMEROS VOLADORES Y MASCARA ---
+    // --- NÚMEROS VOLADORES Y MÁSCARA ---
     cardInput.addEventListener('input', (e) => {
         let val = cardInput.value.replace(/\D/g, '');
         let formattedVal = val.replace(/(.{4})/g, '$1 ').trim();
-        cardInput.value = formattedVal; // Se actualiza el input permitiendo los espacios
+        cardInput.value = formattedVal; 
 
         if (e.inputType === 'insertText' && /\d/.test(e.data)) {
             let numChar = e.data;
@@ -66,51 +67,45 @@ document.addEventListener("DOMContentLoaded", () => {
                 flyingEl.remove();
                 let padVal = formattedVal.padEnd(19, '#');
                 cardDisplay.innerText = padVal;
+                cardNumberBackDisplay.innerText = padVal;
             }, 500);
         } else {
             let padVal = formattedVal.padEnd(19, '#');
             cardDisplay.innerText = padVal;
+            cardNumberBackDisplay.innerText = padVal;
         }
     });
 
-    // Nombre y Expiración
-    document.getElementById('cardNameInput').addEventListener('input', function() {
+    nameInput.addEventListener('input', function() {
         document.getElementById('cardNameDisplay').innerText = this.value.toUpperCase() || 'NOMBRE APELLIDO';
     });
     
-    document.getElementById('cardExpiryInput').addEventListener('input', function(e) {
+    expiryInput.addEventListener('input', function(e) {
         let val = this.value.replace(/\D/g, '');
         if (val.length > 2) val = val.substring(0,2) + '/' + val.substring(2,4);
         this.value = val;
         document.getElementById('cardExpiryDisplay').innerText = val || 'MM/YY';
     });
 
-    // --- 3. CAMBIO DE LOGOS VISA / MASTERCARD ---
+    // --- CAMBIO DE LOGOS ---
     const radios = document.querySelectorAll('input[name="cardType"]');
     const brandLogoImg = document.getElementById('brandLogoImg');
-    const brandLogoImgBack = document.getElementById('brandLogoImgBack');
     
     radios.forEach(radio => {
         radio.addEventListener('change', (e) => {
-            // Animación de desvanecimiento
             brandLogoImg.style.opacity = '0';
-            brandLogoImgBack.style.opacity = '0';
-            
             setTimeout(() => {
                 if (e.target.value === 'VISA') {
                     brandLogoImg.src = 'assets/visa-logo.png';
-                    brandLogoImgBack.src = 'assets/visa-logo.png';
                 } else {
                     brandLogoImg.src = 'assets/mastercard-logo.png';
-                    brandLogoImgBack.src = 'assets/mastercard-logo.png';
                 }
                 brandLogoImg.style.opacity = '1';
-                brandLogoImgBack.style.opacity = '0.5'; // El de atrás es semi-transparente
             }, 300);
         });
     });
 
-    // --- 4. LÓGICA DE PAGO (MENSAJES GRACIOSOS) ---
+    // --- LÓGICA DE PAGO Y VALIDACIÓN ---
     const mensajesGraciosos = [
         "¡Compra confirmada! Tus 100 kilos de basura van en camino.",
         "¡Felicidades! Te acabamos de robar tus datos, lol.",
@@ -118,20 +113,26 @@ document.addEventListener("DOMContentLoaded", () => {
         "Transacción aprobada. Enviaremos un mimo a tu casa a mirarte fijamente.",
         "¡Listo! Has comprado un boleto de ida a Tlaxcala.",
         "Pago procesado. Gracias por financiar mi caguama.",
-        "¡Éxito! Tu suscripción mensual a 'Datos Inútiles' está activa.",
         "Aprobado. El FBI ya no te está buscando... tanto.",
-        "Compra exitosa. Espera tu piedra mascota de 50kg mañana.",
-        "Pago aceptado. Has adoptado virtualmente a un mosquito.",
-        "¡Hecho! Tus créditos sociales han disminuido en 50 puntos.",
-        "Transacción completada. Tu historial de búsqueda será publicado.",
-        "Aprobado. Un mariachi fantasma te cantará a las 3 AM.",
-        "Pago exitoso. Has comprado un NFT de un pixel negro.",
-        "¡Felicidades! Pagaste la colegiatura de mi perro."
+        "Compra exitosa. Espera tu piedra mascota de 50kg mañana."
     ];
 
     document.getElementById('payButton').addEventListener('click', (e) => {
         e.preventDefault();
         
+        // Validación estricta
+        if (cardInput.value.length < 19 || nameInput.value.trim() === '' || expiryInput.value.length < 5 || cvvInput.value.length < 3) {
+            formError.classList.remove('d-none'); // Muestra el error
+            // Animación de vibración para el error (opcional pero se ve bien)
+            document.getElementById('checkoutForm').animate([
+                { transform: 'translateX(0)' }, { transform: 'translateX(-10px)' },
+                { transform: 'translateX(10px)' }, { transform: 'translateX(0)' }
+            ], { duration: 300 });
+            return;
+        }
+
+        // Si pasa la validación
+        formError.classList.add('d-none');
         document.getElementById('checkoutForm').style.display = 'none';
         document.getElementById('loadingScreen').style.display = 'block';
         
@@ -154,5 +155,30 @@ document.addEventListener("DOMContentLoaded", () => {
                 }, 500);
             }
         }, 500);
+    });
+
+    // --- RESETEAR FORMULARIO (Hacer otra compra) ---
+    document.getElementById('resetBtn').addEventListener('click', () => {
+        // Limpiar inputs
+        cardInput.value = '';
+        nameInput.value = '';
+        expiryInput.value = '';
+        cvvInput.value = '';
+        
+        // Limpiar display de la tarjeta
+        cardDisplay.innerText = '#### #### #### ####';
+        cardNumberBackDisplay.innerText = '#### #### #### ####';
+        document.getElementById('cardNameDisplay').innerText = 'NOMBRE APELLIDO';
+        document.getElementById('cardExpiryDisplay').innerText = 'MM/YY';
+        document.getElementById('cvvDisplay').innerText = '';
+        
+        // Asegurar que la tarjeta esté de frente
+        cardInner.classList.remove('is-flipped');
+        cardInner.style.setProperty('--rot', '0deg');
+        
+        // Resetear barra de progreso y pantallas
+        document.getElementById('progressBar').style.width = '0%';
+        document.getElementById('successScreen').style.display = 'none';
+        document.getElementById('checkoutForm').style.display = 'block';
     });
 });
